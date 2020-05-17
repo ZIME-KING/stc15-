@@ -1,0 +1,9 @@
+".\Objects\Interrupt.obj",
+".\Objects\main.obj",
+".\Objects\delay.obj",
+".\Objects\key.obj",
+".\Objects\OLED12864.obj",
+".\Objects\oledcode.obj",
+".\Objects\uart.obj" 
+TO ".\Objects\mpu6050≤‚ ‘" 
+PRINT(".\Listings\mpu6050≤‚ ‘.m51") RAMSIZE(256) 

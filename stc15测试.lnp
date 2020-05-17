@@ -1,0 +1,10 @@
+"Interrupt.obj",
+"main.obj",
+"delay.obj",
+"uart.obj",
+"NFR24L01.obj",
+"OLED12864.obj",
+"oledcode.obj",
+"key_final_version.obj" 
+TO "stc15≤‚ ‘" 
+PRINT(".\Listings\stc15≤‚ ‘.m51") RAMSIZE(256) 

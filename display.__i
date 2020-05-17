@@ -1,0 +1,1 @@
+"lib\Src\display.c" COMPACT ROM(COMPACT) OPTIMIZE (8,SPEED) INCDIR(.\lib\Inc;.\user;.\user) DEBUG OBJECTEXTEND PRINT(.\Listings\display.lst) TABS (2) OBJECT(display.obj)

@@ -1,0 +1,106 @@
+#ifndef __key_final_version_h
+#define __key_final_version_h
+
+
+sbit key_1= p1^0;
+sbit key_2 = p1^1;
+sbit key_3 = p1^2;
+sbit key_4 = p1^3;
+
+
+typedef struct {
+	unsigned char status;    //0空闲 1短按 2长按
+	
+	//unsigned char id;
+	unsigned int  high_time;
+	unsigned int  low_time;
+	
+	unsigned int  falling_edge_flag;
+	unsigned int  rising_edge_flag;
+	
+	unsigned char count; 
+
+}Key_Typedef;
+
+
+Key_Typedef key[4];
+
+
+void Get_key_value(unsigned char n){
+	
+	switch (n) {
+	case 0:
+		return key_1;
+		break;
+
+	case 1:
+		return key_2;
+		break;
+
+	case 2:
+		return key_3;
+		break;
+
+	case 3:
+		return key_4;
+		break;
+
+	default:
+		return 0;
+		break;
+	}
+}
+
+
+//边沿检测  放到定时器1ms跑一次
+void Edge_detection{
+	for(i=0;i<4;i++){
+	key[i].count=Get_key_value(i);
+	key[i].count<<=1;
+		if (key[i].count=0xf0){
+		key[i].falling_edge_flag=1;
+		key[i].rising_edge_flag=0;
+		}
+		else if (key[i].count=0x0f){
+		key[i].falling_edge_flag=0;
+		key[i].rising_edge_flag=1;
+		}
+		
+		if(key[i].falling_edge_flag!=0){
+		key[i].low_time++;
+		}
+		
+		if(rising_edge_flag!=0){
+		key[].high_time++;
+		}
+	}
+}
+
+unsigned char Get_key_status(){
+
+		if(key[i].high_time>=3){      
+			
+			key[i].low_time=0;      //按键处理 计数清0
+			key[i].high_time=0;
+			
+			if(key[i].low_time<=10){ //干扰
+			return 0;
+				
+			}
+			
+		  else if(key[i].low_time<=300){    //短按
+			return 1;
+			}
+			
+			else if(key[i].low_time>=300){    //长按
+			return 2;
+			}
+		}
+}
+
+
+
+
+
+
+#endif

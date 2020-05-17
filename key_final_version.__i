@@ -1,0 +1,1 @@
+"lib\Src\key_final_version.c" COMPACT OPTIMIZE (8,SPEED) INCDIR(.\lib\Inc;.\user;.\user) DEBUG OBJECTEXTEND PRINT(.\Listings\key_final_version.lst) TABS (2) OBJECT(key_final_version.obj)

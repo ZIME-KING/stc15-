@@ -1,0 +1,58 @@
+C51 COMPILER V9.60.0.0   INTERRUPT                                                         05/17/2020 19:06:56 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE INTERRUPT
+OBJECT MODULE PLACED IN Interrupt.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE user\Interrupt.c COMPACT OPTIMIZE(8,SPEED) INCDIR(.\lib\Inc;.\user;.\use
+                    -r) DEBUG OBJECTEXTEND PRINT(.\Listings\Interrupt.lst) TABS(2) OBJECT(Interrupt.obj)
+
+line level    source
+
+   1          #include "main.h"
+   2          
+   3          void Uart(void) interrupt 4
+   4          {
+   5   1          uart_interrupt();
+   6   1      }
+   7          
+   8          void Timer_1(void) interrupt 3
+   9          {
+  10   1      //uart_rx();
+  11   1      }
+  12          
+  13          void Timer_0 (void) interrupt 1
+  14          {
+  15   1          timer_interrupt();
+  16   1        
+  17   1          Edge_detection();
+  18   1        
+  19   1          Get_key_status();
+  20   1          //uart_send_str("uart ok"); 
+  21   1        
+  22   1        
+  23   1          
+  24   1      }
+  25          
+  26          void External_1(void) interrupt 2
+  27          {
+  28   1      //uart_rx();
+  29   1      }
+  30          
+  31          void External_0(void) interrupt 0
+  32          {
+  33   1      //uart_rx();
+  34   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    127    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

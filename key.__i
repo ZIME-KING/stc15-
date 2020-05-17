@@ -1,0 +1,1 @@
+"lib\Src\key.c" COMPACT OPTIMIZE (8,SPEED) INCDIR(.\lib\Inc;.\user;.\user) DEBUG OBJECTEXTEND PRINT(.\Listings\key.lst) TABS (2) OBJECT(key.obj)

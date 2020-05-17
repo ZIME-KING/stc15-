@@ -1,0 +1,1 @@
+"lib\Src\oledcode.c" COMPACT OPTIMIZE (8,SPEED) BROWSE INCDIR(.\lib\Inc;.\user;.\user) DEBUG OBJECTEXTEND PRINT(.\Listings\oledcode.lst) TABS (2) OBJECT(.\Objects\oledcode.obj)

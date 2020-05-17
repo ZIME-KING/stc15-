@@ -1,0 +1,198 @@
+C51 COMPILER V9.60.0.0   MAIN                                                              05/17/2020 19:06:56 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN main.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE user\main.c COMPACT OPTIMIZE(8,SPEED) INCDIR(.\lib\Inc;.\user;.\user) DE
+                    -BUG OBJECTEXTEND PRINT(.\Listings\main.lst) TABS(2) OBJECT(main.obj)
+
+line level    source
+
+   1          #include "main.h"
+   2          
+   3          unsigned char* temp_p;   //ÓÃÀ´´¦Àí×Ö·û
+   4          sbit LED = P2^3;
+   5          
+   6          
+   7          void main() {
+   8   1        unsigned char key_flag;
+   9   1        P_SW1 &= ~0xc0;                   //´®¿ÚÉèÖÃÔÚp3.3  p3.2
+  10   1        //P_SW1 = (P_SW1 & ~0xc0) | 0x40  ;   //p3.6  p3.7
+  11   1        
+  12   1        Delay_us(1);  
+  13   1        init_uart();          //´®¿Ú³õÊ¼»¯
+  14   1        Timer0Init();         //¶¨Ê±Æ÷0³õÊ¼»¯×ö²»¶¨³¤Ö¡µÄ½ÓÊÕ
+  15   1        OLED_Init();
+  16   1        OLED_Clear();
+  17   1        OLED_ShowString(16,0,"OLED_TEST_OK",16);
+  18   1        OLED_DrawBMP(0,2,64,6,BMP2);
+  19   1        Delay_ms(1000);
+  20   1        OLED_Clear();     //ÇåÆÁ
+  21   1              
+  22   1        
+  23   1        while(NRF24L01_Check()); // µÈ´ý¼ì²âµ½NRF24L01£¬³ÌÐò²Å»áÏòÏÂÖ´ÐÐ
+  24   1        NRF24L01_RT_Init();
+  25   1        
+  26   1      
+  27   1        strcpy(rece_buf,"_2.4ghz_tx_ok");
+  28   1        rece_buf[0]=strlen(rece_buf)-1;
+  29   1        SEND_BUF(rece_buf);                         // 2.4g·¢ËÍ²âÊÔ
+  30   1        
+  31   1        uart_send_str("uart ok");                   //´®¿Ú·¢ËÍ²âÊÔ            
+  32   1        
+  33   1      
+  34   1        while(1) {
+  35   2      
+  36   2          //key_flag=Get_key_value(1);
+  37   2        
+  38   2          //uart_send_byte(key[0].falling_edge_flag);
+  39   2          //uart_send_byte(key[0].rising_edge_flag);
+  40   2          //uart_send_byte(key[0].high_time);
+  41   2          //uart_send_byte(key[0].low_time);
+  42   2          
+  43   2          //uart_send_byte(key_flag);
+  44   2          
+  45   2          
+  46   2        if(frame[uart_frame_id].status==1){    //½ÓÊÕµ½Êý¾Ýºóstatus=1;
+  47   3      
+  48   3          frame[uart_frame_id].buffer[frame[uart_frame_id].length]='\0';   //Õâ¸öÀ¶ÑÀÄ£¿é·¢µÄÊý¾Ý×îºóÒ»Î» ²»´ø\0 Ê
+             -Ö¶¯Ìí¼Ó\0·½±ã´¦Àí
+  49   3          
+  50   3          uart_send_str(frame[uart_frame_id].buffer);               //·¢ËÍ½ÓÊÕµ½Êý¾Ý
+  51   3          uart_send_str("\r\n");                                    //»»ÐÐ
+  52   3          
+  53   3          OLED_Clear();                                             //ÇåÆÁ
+C51 COMPILER V9.60.0.0   MAIN                                                              05/17/2020 19:06:56 PAGE 2   
+
+  54   3          
+  55   3          OLED_ShowString(0,4,"UATR_RX",16);
+  56   3          OLED_ShowString(0,6,frame[uart_frame_id].buffer,16);      //ÏÔÊ¾½ÓÊÕµ½µÄÊý¾Ý
+  57   3          
+  58   3          if(strcmp(frame[uart_frame_id].buffer,"open")==0){        //strcmpº¯ÊýÎªc×Ô´øµÄ×Ö·û´®±È½Ïº¯Êý ÏàÍ¬·µ»ØÎª0 ²»
+             -Í¬¸ù¾Ý´óÐ¡·µ»Ø-1»ò0
+  59   4            LED=0;
+  60   4          }
+  61   3           else if(strcmp(frame[uart_frame_id].buffer,"close")==0){
+  62   4            LED=1;
+  63   4          }
+  64   3          //uart_send_str_len(frame[uart_frame_id].buffer,frame[uart_frame_id].length); 
+  65   3          
+  66   3        frame[uart_frame_id].status=0;        //´¦ÀíÍêÊý¾Ýºóstatus Çå0;
+  67   3      }
+  68   2        
+  69   2      
+  70   2      
+  71   2      
+  72   2          if(NRF_IRQ==0)                        //Èç¹ûÎÞÏßÄ£¿é½ÓÊÕµ½Êý¾ÝIRQ»áÇåÁã         ÒªÇó¸ßµÄ°ÑÕâ¸ö·ÅÖÐ¶ÏÀïÈ¥
+  73   2          {   
+  74   3            if(NRF24L01_RxPacket(rece_buf)==0)  //½«½ÓÊÕµ½µÄÊý¾Ý·ÅÔÚ
+  75   3            {                                   //µÚ1Î»ÒÔºóÊÇÊÕµ½µÄÃüÁîÊý¾Ý£¬rece_buf[0]ÊÇÊý¾ÝÎ»Êý³¤¶È Ó²¼þÉè¼ÆºÃµÄ ÏêÏ¸²éÊý¾ÝÊÖ²á
+  76   4               
+  77   4                temp_p=&rece_buf;                           //ÕâÀï½âÊÍÒ»ÏÂtemp_pÊÇÒ»¸öÖ¸Õë Ö¸ÕëµØÖ·=½ÓÊÕµ½µÄÖµµÄµØÖ·
+  78   4                temp_p=temp_p+1;                            //µØÖ·¼Ó1
+  79   4                uart_send_str_len(temp_p,rece_buf[0]),      //Õâ¸öÖµ¾Í°ÑµÚÒ»Î»µÄ   ³¤¶ÈÊý¾Ý ¸øÈ¥µôÁË
+  80   4      
+  81   4                OLED_Clear();                               //ÇåÆÁ
+  82   4                OLED_ShowString(0,0,"2.4GHz_RX:",16);
+  83   4                OLED_ShowString(0,2,temp_p,16);             //oledÏÔÊ¾½ÓÊÕµ½µÄÊý¾Ý
+  84   4            }
+  85   3          }
+  86   2      
+  87   2          if(key[0].status==1){
+  88   3            OLED_ShowString(0,0,"key0_s",16);
+  89   3            key[0].status=0;
+  90   3          }
+  91   2          else if(key[0].status==2){
+  92   3            OLED_ShowString(0,0,"key0_l",16);
+  93   3            key[0].status=0;
+  94   3          }
+  95   2          
+  96   2          
+  97   2          if(key[1].status==1){
+  98   3            OLED_ShowString(0,0,"key1_s",16);
+  99   3            key[1].status=0;
+ 100   3          }
+ 101   2          else if(key[1].status==2){
+ 102   3            OLED_ShowString(0,0,"key1_l",16);
+ 103   3            key[1].status=0;
+ 104   3          }
+ 105   2          
+ 106   2          if(key[2].status==1){
+ 107   3            OLED_ShowString(0,0,"key2_s",16);
+ 108   3            key[2].status=0;
+ 109   3          }
+ 110   2          else if(key[2].status==2){
+ 111   3            OLED_ShowString(0,0,"key2_l",16);
+ 112   3            key[2].status=0;
+ 113   3          }
+ 114   2          
+C51 COMPILER V9.60.0.0   MAIN                                                              05/17/2020 19:06:56 PAGE 3   
+
+ 115   2          
+ 116   2          if(key[3].status==1){
+ 117   3            OLED_ShowString(0,0,"key3_s",16);
+ 118   3            key[3].status=0;
+ 119   3          }
+ 120   2          else if(key[3].status==2){
+ 121   3            OLED_ShowString(0,0,"key3_l",16);
+ 122   3            key[3].status=0;
+ 123   3          }
+ 124   2          
+ 125   2          
+ 126   2          
+ 127   2          
+ 128   2          
+ 129   2      //      key_flag=scan_key();  //»ñÈ¡°´¼üÖµ ÎÞ°´ÏÂ·µ»ØÖµÎª0
+ 130   2          
+ 131   2      
+ 132   2          //Èç¹ûÒ»¹²Òª·¢ËÍ3¸ö×Ö½Ú£¬rece_buf[0]±ØÐëÊÇ3£¡£¡£¡£¡£¡£¡
+ 133   2          //rece_buf[0]Îª±¾´ÎÒª·¢ËÍµÄ×Ö½ÚÊý
+ 134   2      //      switch (key_flag){
+ 135   2      //        case 1:
+ 136   2      //        strcpy(rece_buf,"_key1_down");
+ 137   2      //        rece_buf[0]=strlen(rece_buf)-1;
+ 138   2      //        SEND_BUF(rece_buf);           // 2.4g·¢ËÍ²âÊÔ
+ 139   2      //        uart_send_str(rece_buf);   //    uartÊä³ö
+ 140   2      //        break;
+ 141   2      //        
+ 142   2      //        case 2:
+ 143   2      //        strcpy(rece_buf,"_key2_down");
+ 144   2      //        rece_buf[0]=strlen(rece_buf)-1;
+ 145   2      //        SEND_BUF(rece_buf);          // 2.4g·¢ËÍ²âÊÔ
+ 146   2      //        uart_send_str(rece_buf);   //    uartÊä³ö
+ 147   2      //        break;
+ 148   2      //        
+ 149   2      //        case 3: 
+ 150   2      //        strcpy(rece_buf,"_key3_down");
+ 151   2      //        rece_buf[0]=strlen(rece_buf)-1;
+ 152   2      //        SEND_BUF(rece_buf);        // 2.4g·¢ËÍ²âÊÔ
+ 153   2      //        uart_send_str(rece_buf);   //    uartÊä³ö       
+ 154   2      //        break;
+ 155   2      //        
+ 156   2      //        case 4:
+ 157   2      //        strcpy(rece_buf,"_key4_down");
+ 158   2      //        rece_buf[0]=strlen(rece_buf)-1;
+ 159   2      //        SEND_BUF(rece_buf);        // 2.4g·¢ËÍ²âÊÔ  
+ 160   2      //        uart_send_str(rece_buf);   //    uartÊä³ö       
+ 161   2      //        break;
+ 162   2      //      }
+ 163   2          }
+ 164   1      }
+*** WARNING C280 IN LINE 8 OF user\main.c: 'key_flag': unreferenced local variable
+ 165          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    617    ----
+   CONSTANT SIZE    =    124    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =      3       1
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+C51 COMPILER V9.60.0.0   MAIN                                                              05/17/2020 19:06:56 PAGE 4   
+
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  1 WARNING(S),  0 ERROR(S)

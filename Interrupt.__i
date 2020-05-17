@@ -1,0 +1,1 @@
+"user\Interrupt.c" COMPACT OPTIMIZE (8,SPEED) INCDIR(.\lib\Inc;.\user;.\user) DEBUG OBJECTEXTEND PRINT(.\Listings\Interrupt.lst) TABS (2) OBJECT(Interrupt.obj)
